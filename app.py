@@ -69,3 +69,4 @@ def display_completion():
     """Display completion message when survey completed."""
 
     return render_template('completion.html')
+    

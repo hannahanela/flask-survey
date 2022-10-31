@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <h1>{{ question.question }}</h1>
+  <h2>{{ question.question }}</h2>
 
   <form action="/answer" method="POST">
 
@@ -14,7 +14,8 @@
         <input
             type="radio"
             name="answer"
-            value="{{ choice }}">
+            value="{{ choice }}"
+            required>
         {{ choice }}
       </p>
     {% endfor %}
