@@ -28,11 +28,13 @@ def start_survey():
 @app.get('/questions/<int:num>')
 def display_question(num):
     """Display a survey question."""
-    if num >= len(session['responses']) and len(session['responses']) == len(survey.questions):
+    num_answered_questions = len(session['responses'])
+
+    if num >= num_answered_questions and num_answered_questions == len(survey.questions):
         return redirect('/end')
 
-    if num > len(session['responses']):
-        correct_question_num = len(session['responses'])
+    if num > num_answered_questions:
+        correct_question_num = num_answered_questions
         return redirect(f'/questions/{correct_question_num}')
 
     question = survey.questions[num]
