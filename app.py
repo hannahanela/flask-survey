@@ -14,7 +14,7 @@ responses = []
 
 @app.get('/')
 def index():
-    """Display the start page of a survey."""
+    """Display the instructions for a survey."""
 
     return render_template("survey_start.html", survey=survey)
 
@@ -22,9 +22,9 @@ def index():
 @app.post('/begin')
 def start_survey():
     """Redirect user to the first question of the survey."""
-    survey_start_num = len(responses)
+    first_question_num = len(responses)
 
-    return redirect(f'/questions/{survey_start_num}')
+    return redirect(f'/questions/{first_question_num}')
 
 
 @app.get('/questions/<int:num>')
@@ -36,8 +36,12 @@ def display_question(num):
 
 
 @app.post('/answer')
-def store_answer():
-    """Store answer for a survey question."""
+def handle_answer():
+    """
+    Store answer for a survey question.
+    
+    Redirect user to next question or completion message.
+    """
     answer = request.form["answer"]
     responses.append(answer)
     next_question_num = len(responses)
