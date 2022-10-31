@@ -35,6 +35,7 @@ def display_question(num):
 
     if num > num_answered_questions:
         correct_question_num = num_answered_questions
+        flash('Please answer next question.')
         return redirect(f'/questions/{correct_question_num}')
 
     question = survey.questions[num]
