@@ -1,3 +1,4 @@
+from operator import ne
 import re
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
@@ -40,6 +41,8 @@ def store_answer():
     answer = request.form["answer"]
     responses.append(answer)
     next_question_num = len(responses)
-    print(responses)
+
+    if next_question_num == len(survey.questions):
+        return render_template('completion.html')
 
     return redirect(f'/questions/{next_question_num}')
