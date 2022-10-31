@@ -8,7 +8,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-responses = []
 
 @app.get('/')
 def index():
@@ -20,7 +19,8 @@ def index():
 @app.post('/begin')
 def start_survey():
     """Redirect user to the first question of the survey."""
-    first_question_num = len(responses)
+    session["responses"] = []
+    first_question_num = len(session["responses"])
 
     return redirect(f'/questions/{first_question_num}')
 
@@ -40,9 +40,11 @@ def handle_answer():
     
     Redirect user to next question or completion message.
     """
-    answer = request.form["answer"]
+    answer = request.form['answer']
+    responses = session['responses']
     responses.append(answer)
-    next_question_num = len(responses)
+    session['responses'] = responses
+    next_question_num = len(session['responses'])
 
     if next_question_num == len(survey.questions):
         return render_template('completion.html')
