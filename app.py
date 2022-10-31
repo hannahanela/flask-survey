@@ -9,7 +9,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 responses = []
-question_num = 0
 
 @app.get('/')
 def index():
@@ -30,6 +29,6 @@ def store_answer():
     """Store answer for a survey question."""
     answer = request.form["answer"]
     responses.append(answer)
-    question_num += 1
+    next_question_num = len(responses)
 
-    return redirect(f"/questions/{question_num}")
+    return redirect(f"/questions/{next_question_num}")
