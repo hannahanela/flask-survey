@@ -28,6 +28,13 @@ def start_survey():
 @app.get('/questions/<int:num>')
 def display_question(num):
     """Display a survey question."""
+    if num >= len(session['responses']) and len(session['responses']) == len(survey.questions):
+        return redirect('/end')
+
+    if num > len(session['responses']):
+        correct_question_num = len(session['responses'])
+        return redirect(f'/questions/{correct_question_num}')
+
     question = survey.questions[num]
 
     return render_template("question.html", question=question)
@@ -40,13 +47,22 @@ def handle_answer():
     
     Redirect user to next question or completion message.
     """
+    next_question_num = len(session['responses'])
+
+    if next_question_num == len(survey.questions):
+        return redirect('/end')
+
     answer = request.form['answer']
     responses = session['responses']
     responses.append(answer)
     session['responses'] = responses
-    next_question_num = len(session['responses'])
 
-    if next_question_num == len(survey.questions):
-        return render_template('completion.html')
+    next_question_num += 1
 
     return redirect(f'/questions/{next_question_num}')
+
+@app.get('/end')
+def display_completion():
+    """Display completion message when survey completed."""
+
+    return render_template('completion.html')
