@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-# from surveys import satisfaction_survey as survey
 from surveys import surveys
 
 app = Flask(__name__)
@@ -9,18 +8,20 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
+
 @app.get('/')
 def index():
     """Display survey selection form."""
 
     return render_template("selection.html", surveys=surveys)
 
+
 @app.post('/instructions')
 def display_instructions():
     """Display the instructions for a survey."""
-    session['survey'] = []
     selection = request.form['selection']
     survey = surveys[selection]
+    session['selection'] = selection
 
     return render_template("survey_start.html", survey=survey)
 
@@ -38,6 +39,8 @@ def start_survey():
 def display_question(num):
     """Display a survey question."""
     num_answered_questions = len(session['responses'])
+    selection = session['selection']
+    survey = surveys[selection]
 
     if num >= num_answered_questions and num_answered_questions == len(survey.questions):
         return redirect('/end')
@@ -60,6 +63,8 @@ def handle_answer():
     Redirect user to next question or completion message.
     """
     next_question_num = len(session['responses'])
+    selection = session['selection']
+    survey = surveys[selection]
 
     if next_question_num == len(survey.questions):
         return redirect('/end')
