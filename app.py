@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from surveys import satisfaction_survey as survey
+# from surveys import satisfaction_survey as survey
+from surveys import surveys
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "never-tell!"
@@ -8,10 +9,18 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-
 @app.get('/')
 def index():
+    """Display survey selection form."""
+
+    return render_template("selection.html", surveys=surveys)
+
+@app.post('/instructions')
+def display_instructions():
     """Display the instructions for a survey."""
+    session['survey'] = []
+    selection = request.form['selection']
+    survey = surveys[selection]
 
     return render_template("survey_start.html", survey=survey)
 
