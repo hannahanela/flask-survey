@@ -12,6 +12,8 @@ debug = DebugToolbarExtension(app)
 @app.get('/')
 def index():
     """Display survey selection form."""
+    session.permanent = True
+    session['selection'] = ''
 
     return render_template("selection.html", surveys=surveys)
 
@@ -20,8 +22,12 @@ def index():
 def display_instructions():
     """Display the instructions for a survey."""
     selection = request.form['selection']
+
     survey = surveys[selection]
     session['selection'] = selection
+
+    if selection in session.get('completed', []):
+        return redirect('/end')
 
     return render_template("survey_start.html", survey=survey)
 
@@ -43,6 +49,12 @@ def display_question(num):
     survey = surveys[selection]
 
     if num >= num_answered_questions and num_answered_questions == len(survey.questions):
+        completed = session.get('completed', [])
+        print(completed)
+        completed.append(selection)
+        print(completed)
+        session['completed'] = completed
+
         return redirect('/end')
 
     if num > num_answered_questions:
