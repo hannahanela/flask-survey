@@ -10,7 +10,7 @@
         <b>{{ questions[i].question }}</b>
         {{ responses[i].answer }}
         {% if questions[i].allow_text == True %}
-          {{ responses[i].comment }}
+          <i>{{ responses[i].comment }}</i>
         {% endif %}
       </li>
     </ul>
