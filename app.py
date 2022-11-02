@@ -70,8 +70,9 @@ def handle_answer():
         return redirect('/end')
 
     answer = request.form['answer']
+    comment = request.form.get('comment', None)
     responses = session['responses']
-    responses.append(answer)
+    responses.append((answer, comment))
     session['responses'] = responses
 
     next_question_num += 1

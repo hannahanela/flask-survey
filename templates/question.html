@@ -18,7 +18,13 @@
             required>
         {{ choice }}
       </p>
-    {% endfor %}
+      {% endfor %}
+
+      {% if question.allow_text == True %}
+        <p>
+          <textarea name="comment" placeholder="Answer here."></textarea>
+        </p>
+      {% endif %}
 
     <button>Continue</button>
   </form>
