@@ -1,6 +1,6 @@
 # Flask Survey
 
-A Flask app for completing customer surveys. Uses Flask sessions to persist user data for browser session. Redirects user to correct chronological question with a flash message.
+A Flask app for completing customer surveys. Uses Flask sessions to persist user data. Redirects user to correct chronological question with a flash message.
 
 ## Developer Environment Setup
 
