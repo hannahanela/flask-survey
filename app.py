@@ -72,7 +72,10 @@ def handle_answer():
     answer = request.form['answer']
     comment = request.form.get('comment', None)
     responses = session['responses']
-    responses.append((answer, comment))
+    responses.append({
+        "answer": answer,
+        "comment": comment,
+    })
     session['responses'] = responses
 
     next_question_num += 1
@@ -82,6 +85,16 @@ def handle_answer():
 @app.get('/end')
 def display_completion():
     """Display completion message when survey completed."""
+    selection = session['selection']
+    survey = surveys[selection]
+    questions = survey.questions
+    num_of_questions = len(questions)
+    responses = session['responses']
 
-    return render_template('completion.html')
+    return render_template(
+        'completion.html',
+        num_of_questions=num_of_questions,
+        questions=questions,
+        responses=responses
+    )
     
